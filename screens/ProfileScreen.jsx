@@ -1,15 +1,19 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
+import InputNombre from '../components/InputMail';
+import InputApellido from '../components/InputPassword';
 import BotonEnviar from '../components/BotonEnviar';
-import InputUser from '../components/input';
 
 export default function ProfileScreen({navigation}) {
     return(
-        <View style={{flex: 1, alignItems: 'center', justifyContent:'center', backgroundColor:'#41AC92'}}>
-            <View style={{alignItems: 'center', justifyContent:'center', width:'75%', backgroundColor:'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,}}>
-                <InputUser/>
+        <View style={{flex: 1, alignItems: 'center', justifyContent:'center', backgroundColor:'#e66465'}}>
+            <View style={{alignItems: 'center', justifyContent:'center', width:'75%', backgroundColor:'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,}}> 
+                <Text>{"\n"}</Text>
+                <InputNombre/>
+                <InputApellido/>    
                 <BotonEnviar/>
-            </View>
+                <Text>{"\n"}</Text>
+            </View>   
         </View>
     )
 }

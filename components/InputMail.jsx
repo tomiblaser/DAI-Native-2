@@ -6,8 +6,8 @@ const InputNombre = () => {
   return (
     <Input
       disabledInputStyle={{ background: "#ddd" }}
-      label="Name"
-      placeholder="Enter Name"
+      leftIcon={<Icon name="email-outline" size={20} />}
+      label="Email"
     />
   );
 }

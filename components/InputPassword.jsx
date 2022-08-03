@@ -2,14 +2,14 @@ import * as React from "react";
 import { Input } from "@rneui/base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const InputApellido = () => {
+const InputPassword = () => {
   return (
     <Input
       disabledInputStyle={{ background: "#ddd" }}
-      label="Last Name"
-      placeholder="Enter Last Name"
+      leftIcon={<Icon name="key-outline" size={20} />}
+      label="Password"
     />
   );
 }
 
-export default InputApellido
+export default InputPassword

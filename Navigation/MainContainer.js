@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import ProfileScreen from '../screens/ProfileScreen'
 
-const profileName = 'Profile';
+const profileName = 'Log In';
 
 const Tab = createBottomTabNavigator();
 
