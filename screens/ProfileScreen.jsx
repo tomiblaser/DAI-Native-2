@@ -1,7 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text} from 'react-native';
-import { Input } from "@rneui/base";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {View, Text, TextInput, StyleSheet, Alert} from 'react-native';
 import { loginEntry } from '../services/LogInService';
 import { Button } from 'react-native-paper';
 
@@ -16,18 +14,20 @@ export default function ProfileScreen({navigation}) {
     
       const onPressLogIn = async (e) => {
         
-        if (!userState.email|| !userState.password){
+        if (!userState.email || !userState.password){
           
           console.log("Faltan datos. Por favor, agreguelos para continuar.")
+          Alert.alert("Faltan datos. Por favor, agreguelos para continuar.")
         } else {
           
           await loginEntry(userState).then(() => {
             console.log("Sesión iniciada correctamente")
-            
+            navigation.navigate("HomeScreen")
           })
           .catch(() => {
             
             console.log("Email o contrasena incorrecta")
+            Alert.alert("Email o contrasena incorrecta")
           });
         }
       }
@@ -38,24 +38,21 @@ export default function ProfileScreen({navigation}) {
                 
                 <Text>{"\n"}</Text>
                 
-                <Input
-                    disabledInputStyle={{ background: "#ddd" }}
-                    leftIcon={<Icon name="email-outline" size={20} />}
-                    label="Email"
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
                     value={userState.email}
                     onChangeText={text => setUserState({...userState, email: text}) }
                 />
                 
-                <Input
-                    disabledInputStyle={{ background: "#ddd" }}
-                    leftIcon={<Icon name="key-outline" size={20} />}
-                    label="Password"
-                    secureTextEntry={true}
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
                     value={userState.password}
                     onChangeText={text => setUserState({...userState, password: text})}
                 />
                 
-                <Button mode="contained-tonal" onPress={() => {onPressLogIn}}>
+                <Button mode="contained-tonal" onPress={onPressLogIn}>
                     Continue
                 </Button>
 
@@ -64,3 +61,12 @@ export default function ProfileScreen({navigation}) {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});

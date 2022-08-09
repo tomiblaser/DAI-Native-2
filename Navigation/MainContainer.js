@@ -1,42 +1,48 @@
-import * as React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import ProfileScreen from '../screens/ProfileScreen'
+import HomeScreen from '../screens/Home';
 
-const profileName = 'Log In';
+const Stack = createNativeStackNavigator()
 
-const Tab = createBottomTabNavigator();
+const MainStack =()=>{
+  
+return(
+<NavigationContainer>
+    <Stack.Navigator
+    screenOptions={{
+        headerShown:false
+    }
+    }>
+        <Stack.Screen
+            name='ProfileScreen'
+            component={ ProfileScreen }
+        />
+        <Stack.Screen
+            name='HomeScreen'
+            component={ HomeScreen }
+        />
 
-export default function MainContainer(){
-        return(
-            <NavigationContainer>
-                <Tab.Navigator
-                initialRouteName={profileName}
-                screenOptions={({route}) =>({
-                        tabBarIcon: ({focused, size}) => {
-                            let iconName;
-                            let rn= route.name;
+        
+         
+    </Stack.Navigator>
+</NavigationContainer>
 
-                            if (rn === profileName){
-                                iconName = focused ? 'person' : 'person-outline'
-                            }
+)}
 
-                            return <Ionicons name={iconName} size={size} />
-                        },
-                    })}
-                    tabBarOptions={{
-                        activeTintColor: '#30713a',
-                        inactiveTintColor: 'grey',
-                        labelStyle: {fontSize:10},                     
-                    }}
+export default MainStack
 
-                    >
-
-                    <Tab.Screen name={profileName} component={ProfileScreen}/>
-
-                </Tab.Navigator>
-            </NavigationContainer>
-        )
-}
+const style = StyleSheet.create({
+    buttonContainer:{
+        backgroundColor: 'green',
+        marginBottom: 10,
+        paddingHorizontal:20,
+        paddingHorizontal:10
+    },
+    buttonText:{
+    color:'white'
+    }
+})
