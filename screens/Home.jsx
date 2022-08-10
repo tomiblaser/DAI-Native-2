@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Alert } from "react-native"
 import { Searchbar } from 'react-native-paper';
 import { PlatosClient } from '../services/PlatosClient';
+import { searchEntry } from '../services/PlatosService';
 
 export default function HomeScreen({ navigation }) {
 
@@ -21,10 +22,10 @@ export default function HomeScreen({ navigation }) {
         } else if (largo < 3) {
             console.log("Ingrese al menos 3 letras en la barra de búsqueda para buscar platos.")
             Alert.alert("Ingrese al menos 3 letras en la barra de búsqueda para buscar platos.")
-        }   else {
+        } else {
 
-                await searchEntry(searchState).then((response) => {
-                    console.log(response)
+            await searchEntry(searchState.search).then((response) => {
+                console.log(response)
 
             })
                 .catch(() => {
