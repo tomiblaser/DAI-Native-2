@@ -46,6 +46,7 @@ export default function ProfileScreen({navigation}) {
                 />
                 
                 <TextInput
+                    secureTextEntry={true}
                     style={styles.input}
                     placeholder="Password"
                     value={userState.password}
