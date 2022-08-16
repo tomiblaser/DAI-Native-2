@@ -34,15 +34,3 @@ return(
 )}
 
 export default MainStack
-
-const style = StyleSheet.create({
-    buttonContainer:{
-        backgroundColor: 'green',
-        marginBottom: 10,
-        paddingHorizontal:20,
-        paddingHorizontal:10
-    },
-    buttonText:{
-    color:'white'
-    }
-})

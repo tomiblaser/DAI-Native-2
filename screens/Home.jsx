@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Alert } from "react-native"
+import { View, Alert, FlatList } from "react-native"
 import { Searchbar } from 'react-native-paper';
 import { PlatosClient } from '../services/PlatosClient';
 import { searchEntry } from '../services/PlatosService';
+import PlatoCard from '../components/PlatoCard';
 
 export default function HomeScreen({ navigation }) {
 
@@ -26,7 +27,6 @@ export default function HomeScreen({ navigation }) {
 
             await searchEntry(searchState.search).then((response) => {
                 console.log(response)
-
             })
                 .catch(() => {
 

@@ -6,8 +6,8 @@ export const loginEntry = async (userState) => {
     .post(``, {
       ...userState
     })
-    .then(async(res) => {
-    
+    .then((res) => {
+      return res.data
     })
     .catch((e) => {
       console.log(`error`, e.response);

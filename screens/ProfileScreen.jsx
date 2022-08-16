@@ -8,8 +8,8 @@ import { Button } from 'react-native-paper';
 export default function ProfileScreen({navigation}) {
 
     const [userState, setUserState] = useState({
-        email: '',
-        password: '',
+        email: 'challenge@alkemy.org',
+        password: 'react',
       });
     
       const onPressLogIn = async (e) => {
