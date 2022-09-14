@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import ProfileScreen from '../screens/ProfileScreen'
 import HomeScreen from '../screens/Home';
+import PlatoScreen from '../screens/PlatoScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -25,7 +26,10 @@ return(
             name='HomeScreen'
             component={ HomeScreen }
         />
-
+        <Stack.Screen
+            name='PlatoScreen'
+            component={ PlatoScreen }
+        />
         
          
     </Stack.Navigator>
