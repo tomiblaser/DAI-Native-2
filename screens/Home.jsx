@@ -3,7 +3,7 @@ import { View, Alert, FlatList } from "react-native"
 import { Searchbar } from 'react-native-paper';
 import { PlatosClient } from '../services/PlatosClient';
 import { searchEntry } from '../services/PlatosService';
-import PlatoCard from '../components/PlatoCard';
+import CardFlat from '../components/CardFlat';
 
 export default function HomeScreen({ navigation }) {
 
@@ -40,14 +40,26 @@ export default function HomeScreen({ navigation }) {
         }
     }
 
+    const renderItem = ({ item }) => (
+        <CardFlat 
+        title={item.title}
+        image={item.image} />
+      );
+
     return (
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465' }}>
             <Searchbar
-                style={{ marginTop: 10 }}
+                style={{ marginTop: 10, marginBottom:20 }}
                 placeholder="Search"
                 onChangeText={text => onPressSearch(text)}
                 iconColor="red"
             />
+
+        <FlatList
+            data={plato.arrayPLatos}
+            renderItem={renderItem}
+            keyExtractor={item => item.title}
+        />
         </View>
     )
 }
