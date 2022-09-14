@@ -11,11 +11,15 @@ export default function HomeScreen({ navigation }) {
         search: ''
     });
 
-    const onPressSearch = async (e) => {
+    const [plato, setPlato] = useState({
+        arrayPLatos:[]
+        });
 
-        let largo = searchState.search.length
+    const onPressSearch = async (text) => {
 
-        if (!searchState.search) {
+        let largo = text.length
+
+        if (!text) {
 
             console.log("Ingrese algo para continuar con la busqueda")
             Alert.alert("Ingrese algo para continuar con la busqueda")
@@ -25,11 +29,11 @@ export default function HomeScreen({ navigation }) {
             Alert.alert("Ingrese al menos 3 letras en la barra de búsqueda para buscar platos.")
         } else {
 
-            await searchEntry(searchState.search).then((response) => {
+            await searchEntry(text).then((response) => {
                 console.log(response)
+                setPlato({arrayPLatos: response})
             })
                 .catch(() => {
-
                     console.log("No se han encontrado coincidencias con su busqueda")
                     Alert.alert("No se han encontrado coincidencias con su busqueda")
                 });
@@ -40,11 +44,9 @@ export default function HomeScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465' }}>
             <Searchbar
                 style={{ marginTop: 10 }}
-                value={searchState.search}
                 placeholder="Search"
-                onChangeText={text => setSearchState({ ...searchState, search: text })}
+                onChangeText={text => onPressSearch(text)}
                 iconColor="red"
-                onIconPress={onPressSearch}
             />
         </View>
     )
