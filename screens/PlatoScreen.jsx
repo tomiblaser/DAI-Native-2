@@ -1,19 +1,105 @@
-import React from 'react';
-import { View } from "react-native"
-import { Card, Title, Paragraph } from 'react-native-paper';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Alert } from "react-native"
+import { Card, Title, Paragraph, Button } from 'react-native-paper';
+import { ActionTypes, useContextState } from '../contextState'
+import { getFoodInfo } from '../services/PlatosService';
 
-export default function PlatoScreen({ props }) {
+
+
+export default function PlatoScreen({ navigation, route }) {
+
+    const idFood = route.params.idPlato
+    const image = route.params.foodImage
+    const title = route.params.foodTitle
+
+    const { contextState, setContextState } = useContextState()
+    const [informacion, setInformacion] = useState([])
+    console.log("ACA", idFood)
+    const [loadState, setLoaded] = useState(false)
+
+    const foodInfo = async (e) => {
+        await getFoodInfo(idFood).then((response) => {
+            setInformacion(response)
+
+        })
+            .catch(() => {
+                console.log("noooo")
+
+                Alert.alert("Datos incorrectos")
+            });
+    }
+
+    const agregarMenu = (vegano, precioPlato, healthScorePlato) => {
+        let platosNormales = 0;
+        let platosVeganos = 0;
+        let HealthTotal = contextState.menu.healthScore + healthScorePlato
+        console.log("hola gagaga", vegano)
+
+        switch (vegano) {
+            case true:
+                platosVeganos = 1
+                break;
+            case false:
+                platosNormales = 1
+        }
+
+
+
+        if (platosVeganos == 1 && contextState.menu.platoVeganos == 2) {
+            Alert.alert("Llegaste al maximo de platos veganos")
+            console.log("No se admiten mas platos veganos")
+        } else if (platosNormales == 1 && contextState.menu.platoNormales == 2) {
+            Alert.alert("Llegaste al maximo de platos NO veganos")
+            console.log("No se admiten mas platos no veganos")
+        } else {
+            console.log("entro al context")
+            setContextState({
+                type: ActionTypes.setMenu,
+                value: {
+                    platoNoVeganos: (contextState.menu.platoNormales + platosNormales),
+                    platoVeganos: (contextState.menu.platoVeganos + platosVeganos),
+                    precioMenu: (contextState.menu.precioMenu + precioPlato),
+
+                    healthScore: (contextState.menu.healthScore + healthScorePlato),
+                    promedioHealthScore: (HealthTotal / (contextState.menu.cantidadPlatos + 1)),
+
+                    cantidadPlatos: (contextState.menu.cantidadPlatos + 1),
+
+                    listaPlatos: [...contextState.menu.listaPlatos, informacion]
+                }
+            })
+
+            navigation.navigate('HomeScreen')
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            await foodInfo()
+        })()
+    }, [])
+
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465', justifyContent:'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465', justifyContent: 'center' }}>
             <Card mode='contained' style={{ width: 550, height: 350, marginBottom: 20 }}>
                 <Card.Content>
-                    <Title style={{textAlign:'center'}}>Food Name</Title>
+                    <Title style={{ textAlign: 'center' }}>{title}</Title>
                 </Card.Content>
-                <Card.Cover source={{ uri: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJAAuAMBIgACEQEDEQH/xAAbAAACAgMBAAAAAAAAAAAAAAAEBQMGAQIHAP/EADsQAAIBAwMCBQIDBwMCBwAAAAECAwAEEQUSITFBBhMiUWFxgRQykQcjUqGxwdEzQvAVYiQlNIKS0vH/xAAaAQADAQEBAQAAAAAAAAAAAAABAgMEAAUG/8QAJhEAAgICAgIBBAMBAAAAAAAAAAECEQMhEjEEEyIVMkFRBSORFP/aAAwDAQACEQMRAD8ARTF/NlaKT94jMd2MEdgcH6UdKi3mmoDIVmVdy+zN80PHLbIXd49zSEhXVh0759qlnZoNNCRxzcMeWUDA+D3p+0yZWZJHEzrt/Kw3Y55+BWAWlCxuGUDGzHQVtOUjcBQNrHJYDBB9q1tpMEgMMnIG7/FYW9DWD3Fm0UeSj8dSajjjzHjt3phOy+UgyDv5bLZI+KgVA1u4HUmqQdxKQBnDMhTedoPA7VG68r9KJMIUHk9c0NKfWcdulOhiPIzUsUx3h228dmodjzxWNyBl8xSy+wrn0Kyw6M6x3e6Vw0QJYhhgZ969Bte4jcMSBICSR0wfagYZWeMOY94P8h7UVbuzRRbHBRCFAVeev8zUHNqlROhzqN1EqRrEpAbO4suKCu/Km09mVDn2281i8SYWygqNm8qAOpNBxXEzZhDgeZ6SW6iqqbb2ADCFtPcrCSsbZz3Oahhkmuo44zJkrnCsuTinllaj/pd55cpFwHPlkHAAB5PzwaUwWN88Wbe3mJJ9TeWT96GRpLbCrZCm4SNECMg84HFei9Uh2KzZOMqM5oqWCRXIkDBl6sy7B85yKmspVtsrArOW4LHv8AVncvyg0RNYTbD5kscW7nDvg/p1qWO1Koq+ej+rPCnGfrimCboyd5tbTnOHAaQn6DpRcEE86l3lJQeybA361CWZo6hJMsqoqSxkw7shlOVz35ovT4rnUrtYbJAsaDliOEHQ04trDz5RFH06yMOiD5zTSK4tbFGhsYkCDl5AM5b/ADXPyXx4nUHaZpVlpe0QRIXVCzzPyQO+f8V6l0l69y4thujgyTLI3V69WJw5O5FY4/2UbRLqGORVnAZm9OX7CrRr12lxo/lKGmyPzk/6Z6CqNaSRQ3AWdSVJ44q0TsYtDRlkHmOfRGRyVBz0719FF/FkH2IyjuAS5HXBAqNmRSUd8MO5H96mkmlELv6V3HkDhv0qEeZNG2Ey35uRmsb7YSQvuKjuea3ibb6SckGg1EiuA+c44NbxE+YfpV46RWIS0mVP1qPUBGqReWRyOa1XGBuOAW5NR3m1chH3eoj7UyGYK3uKIsLGTUbmK1jOGkPX+EdzUcYDDmrV4EfTree7kv5QkhjCw8ds8/2qeabhBtHRVujGr6HbWWmx3NgJF8vMcgZt2T/FSOIukaYf1KRjnrjvXQBc213E1vFh4mJ/nVKk0a9XUm06OB5pAcIqg5dexz2+a8/Dmck1Ps7Ljp3EwHkniCmUHAzhj/zFWDQvB15qUYluw1nBn0n/AHOPfHb6mrD4a8HR6cEm1HZcXK8qgGUQ/wB8VbQxBwFxjvisXlfynH44v9DDFfYq0rQNP02MeTArcYMknqZvv7fFHosbRmNGGBwcLU5IPUfyqF+K8mefJN3J2aEkgeS2hkBjlijZSOhAIP2qvan4Vs5YZGsc2czdSnQ/UdvtVl3Ac1ozDceTzzT4vIyQdpiSimc8tNCubeebzYASnRi2TMf/AK/Ao6PTLm6yLnfM5OFQEhYxVku5BkuNpIzjI/rUBuzHEBGoYEAA5wB78/Fb35M57IOFAsenqlsElRLdOhIfJPxWWtrX/StA0oHCL7H3zUivLNLFtO+RweGXgCtGEslwVlimhiA2l87Mj69v60PY/wBnaQLDp73EgM6Isa4IJPHHxWadNbxWY32cUO3GCzuWLfTNeqTzyfQTj0j298N8cflyL296Kk1BSgycKoCxgno3vSsr5RI2hcnClT1rDhj+8EYfP9a+pt0SewpZBKNx2vhiSzck/FG210+xhGY4lY9MfyxS61jEVtIG4bAZB8g1szrFIfOXLgYI7A9qzzjYA+bAlA3D0jcWAyPpQO8eY5GMe4FeVy24ruI+KHUEByePiq41SHgzfdnCjqaxcFGgjYYB5zULkggg9BWrYMQ56VUdkkTYWtnYsg96hQ8VuT6aIvQy0K8lt7yMiRgm4BsnIxmuyaVqNhcRbrRkB6fNck0PRbi4sZr1xst2KpFIQcMc8n6Ct/EdvqHhKaCOa6huI7lS8U1sxVWAxn3968vyvFh5Mqi9otF1HZ2h22rubhex962yQcd6474a8Qane3aKDNcLGdwjJJANWpP2gNYSm21KyKyAk5zjP8q8mf8AGyU+KKqSaLuxIAyOtQNId+DjZjuOc1VZ/wBounFWIt3JxwMjk0kP7Q3e7CmKNYiem7JpPpuaroHJF+mOOQKEadgaX2HiC1v1xEwLY5qSS5Rxweal6ZR1JAbNLqcAMAMZOaFsJIXaeKUbn/1Afp/wVO1q1x+QjOKAtLO4XUVZ45EijJ8x14GMcD55xWqCXEm1YynE0KtcPKI8AkOG/IO5+tB2OowXmWSEnkHc/JOO9Qa5L/1C2urWGRElkxtBbrgjIo7SdM/BWIaYqqomSf603rXC32UjBcdjo3ixxPIyApnaMEEsfpXqq41cQxoTIu0OO3OMe/avVJYJGeznnnGSNF6EDr7Gsxo4ljaXDxlvUuaB/EHovHzUubh48K4x1yOa+m2tExteRWbpvtgY3U/lJ681BHJbAlZowXPRjQrSSmLD4zQw8wHtx70rWtHMaOscTp5bgb+ynjHzU13ZhNq+YrBl3DB/Ln+tLEuP4gCR70fFIJbdE2oEVsoQ3qNJK1QE6Fl0phlMb5GOORQ+7jFNL1fPhJ6kHg+31pYyVoXQ54NxTzwnpQ1rWYbVwfIUeZNj+Af56fekaoScCugfs9jSy0+6vG4eeTYp77VHT9az+VmePE2hoq2dBube0NmkHlqkKKFRVO3aPjFIm8KaXfFvOaXacZAI5xUGqXt01mZrdC4jYEr7jvivWHiC1kg9Myqc4IPUV8/iU0uSZs10O7HSbTRIf/LoI0iPJ2/mJ+T3qp+L9CbWc3FvjzVHIPU00vPEEKoV/ED9aih1a3aPekikj3NVissZc1sDp6Ob2uimO5Md9bSZJwMg+mgF0rUfxJHkMqbuG6gCu2aYtrrMALIjNnBB96Kbw5ZA7yhX/wB1bPqco/dEn60zlOl2V/A6yJFIMjPAqz2KXTYLqfvVya2tIFwFH1NDSGBUJQDivPy+b7JfaHjQvSc2xDHtSLXfEs1zObWBtirwze1M764QjtVK1SNVvfNU8v1rR4uOMnbJyk0P73T7JYyUhd5MZaV3bJ4zxzWpkjeF1jjYIAGyZC20dutST3Ej2ot51DEY4j9vpW+l2Jlk2Ipi45BXAxngc8UzdL5MnyYFbQfiZEQ7vLbOA/8At/8A3Neo66njsZGVcrGjHjHLfOazRXKW0AoMdr0Lwtn9KlAij4DAfB4rV55HwHL5x71jyd6btwJ9i3Nert9iGjhC3ADH/tNamI9VBXJ71gAgnagH2qbIKbSMce9GziDa3OMj7VhSV4xg+4qeRMKCrEn5NQk7Ww/8qKZxKJiEYZJ3DBoFn5+tEMwHPapYkifkjrT8g2Cq2BXQvCUJn0W1QHAZ3yfnJqj+REZFVMgk4966n4fsv+neErdzHumWIuQOvJNed50v66X5K47se2tuv4YR49GMfWqd4h8Iv5pmst3q5IHWmvhjxzpV3P8Agb1vw06k439G+9XPbbzYKOrZHYivLj7fGlbRoONHwbq9yuNrj5JxRlt4Ev7QbnuuSMY3E11W48pF/MAB2pRPMrE+ofFVfm5WqBSE+k2s2hwxqXLZzub5p4dTaWPggmgZpg0DRt6gfbtSZpnt5mQ9OoqFub2Gx1NMXYZOc0uupsLgdPrWv4sOo96W390PLI70qxvkK5A9/ddcdqrt5IXOc0ZdSFs89aWzcmvYwQ4og3ZbNBDz20lwVDsVA3N/to78T5CzJbhQiplmOTkfFU63N1EyzWL7ZQMbM+lvt0o5NUklULLIqySJ5bIowR8/HT+dLk8Zt2ugUS3kySzn8U2/djB+f8dKxQDL5scfn5XbFuJHfH/DXqeMFQLEzsQefUaiLfAFHLYtJneu0jt1qGe2ij4AJ+RzWpSViEH4hFGAcn3qNpye5rcW7MC0cZKjqcVhbeV84jBA9hT3E4x5g/iFEwW8twjFE3IByazb6bPO2yBNzezZH9af2dp5EAjK7JFPqO/vSucekUxw5MrhtCFDeU/9hW9jaTzSYjiIHv2qyB0LFW47mpUwCMYAruTK+hAdvZR2pwFMkzjhyPy+/wBK6Do9zELC0hlPoECAgVzuWVmDM5cqDhYo+N3Pc9hTHT75l0y2eMFQAycHI4Y96x+Vjc4popfCqLAfAOi3Ml08Rm3TyrJvRwWjHOQufmq7q3hjXtIvY7fTjd3tq3SZW2MPqCcUZFrE8RzGzZ+tNbfxTdIuHlJHseanHNlj9ytHNwe+ilzPrsMjx2sWreZEcyhl4VR89DUUPjCeOXDSyTKPzl0wUroq+KHkXGBj6VsusGT823/4ijLyIV8oApfsU+HtSj1a3aWAlgPzYHQ0ZcWrSt33djTKLUxjbgEH7VHbN5l0COQOorzZzXJtKjmJZYWjyB1pZcoxU7qt97GgQtiqnqk6ITirYG5MnJiS6ODxQLnJqW7n3v8AFRJ1r1YqkSDLXJG0jINTzRSJD58K7iW8uQ+nJOMqxz8DB+aithzThYon0m93jkIpU+xzxQjkqVDw7FVtJ6fLlyGYnrjIHz27mvUNaSG3mZo9x2HIZRu2/X4r1XUEh+CDYo0aNwh9Kfnfdwp9vk/Ssi1toMvtEhJA9RIB+nuKT2t8XXyy2Ng9CjoPcmp7jUIxjyjlFUL6uQTxgfas/rknRnGJnXyt7yCNWJUCNMAAfwjuakgWWfbLbo6j/YrYBY/b+woO1jlumzIC7vyjN+WMfA96u/hzR5by/hhfMUKLlgByAOvPzUsj46GirC/DXhS7v1E+oymKDOQqrgnjse31pX4406PSdYSK2j2208YaME556Hn9P1rrcSqibVUBcYx8VU/2k6Z+O0aO4jOJLWXd0HKHhh/Q/amxLi7ZoguJy6KNWbOQDnpmpGUsoHII5yKi4WXCLwvWtJ5NwQAhGOevStRUDecKzqy+aG/JGqnBPu3wOuKt2j6UH8J2U74IS5ljkKjGAzEjP/O9UxXKuTbEko+0yAbeT0xV58B3UFzbaloss5JkXzY/r3wT1IIzU80XKFIR7BLzw++MxE0qk066i6qSfimw12WxuHtbsYkjOPcN8ijotZtJ15K5rzOWWD2iTKoWuIj6lIqaG8kDck4qxXD2Uv8ACaXTx2a8qQKpHJy7Rx6C7ZiApOTTe3uxaRbm645qtyXsFucqRkUpvtVllJCnANH/AJ+b6A2WDVNfGCI25PzVWubySZiWJz9aGdyxyTn61qBmteLDGCEbNgS3WiIVqJBRkCcink6AFW68rRmrJLb6H5u4qk0qoCo54y36cGs6fbtPPHCi5LnGPjv/ACqTx3cxWs1tZAzCK3hxujIwGY9x0JwBU8UbnZSK1ZWre6aIF5HAjYbVlAyrfB9q9W9ureYFSaBEfHqBBR/tng/yr1baHTINJtgL+ONxw6FefpS5zIrGNc+k0wsRK94kqBsRsD1qMQZlaaX93FuJGOp+KROnsyjDRdUERUSqSYyAK7X4QgMenx3TjElz+8I9h2H9/vXGNAT8ZqFtYWMZVp5QpbqVXqx/TNd2iHlIEXhAoVfpWXLBcrL4kNUbA5qG9hS8tZraX8kqlD96H83ACBia3E3pO6kstRwq8LWryxSjc0TlHBHAIOMmhJsmTzA7fkA247f2pz49K2niW8jhYbpCHRe2SBk/rVdSeeTclsgUN+Zm6/Jx/StkVas6zwkickenewwpORgf8zTLQdUaxaK+WSPzIXK7McBeh/lSa5F0qNI+wsEClgMbEz1+tTWs0UNxKbaBZX2hIggzkdzk0zjaFTLp4rtUkn/ERpuV1B4qqMrJzGx+hq26NdLqmjCORw08IwM9WHwPjp9qS31kQ5dMBRn01HhYk1sUNezR/mJ/WoJNRkI6mpXQtnI5odogaCikTtkTXDNye9YGTzW/kfFbLCffNPpANQKkVakWI8Y4qaOA96RyRxrCme1MLeMcenJrEEOcAcn2p/pGlF5FedcYOQgqTtjJWG6DbjTreS9ulx6c9e3b6GqLq1xNf6hLOh2yTP8AvI36D2yO3AHT2q5eMb6K0t4rB2ARxmY+38IPt7/aqNayQ72uJ8PBkojEZKjPc1owxrZWqVG9sojkaK4XJAxIzqGXPbJ9q9Utp/4t5GS4ZgOFXZ1X5+a9VWw0QxSSR+YE9WwKXA6MKyZEa3I4O9ic5xg+1T6LqYe+8r8LC34h/wB4WXqKPex00a2LNtyiRMhB0Rjzj7iszdS2jGOv2T6X51/c6iYv/TJ5auTnLnr+g/rXT+o4PSl/hTSYdG0WGzhyeTI7HqWY5/wPtTJ02GpzlydmzGqiQg4DZJ55xmoZ7rnGfbiszNtBI7Dmk97OYyXGMYpUOUD9oxA8RmXCH9wmexzyM1WrMzKreXA8zSMFV8hRnoB9KbeI5je65MwXLhQgbGTx7fTNLWYRTREz3EqoSThPyH2OB1rfBaEZqJJ8XNrcR4YkPMynKhM9P7VvJdeqUwhII5HwtweFVBxwPehmZvMlbMqeduDxtwSvbJqdZ47byjKEYGIBIkO7Hz9TT0K2H6VfQWc8T6e0kmw4YL1YZ5qzym3u1aSBsoSQQRgg/I7Vzv8AFTo0rR744mky6r1HsM9BTXTL4NJHJ5oimA9W5sLtHUc8seOtI4HXeh5cWCMBuTnHDCl82nOD6PUPmn+nTLqEZZRh1PqX2HxUsluOaTQriVQ2kifmib7c1kW7dAjEj/tqzC2yeBUq2xNK4oHErUVtI35Ym/SjbfS55CN2Ix880+htXzjbmj4NOkPYj4pGkMoCuy06ODhV3SfxmmdzdwaPZm4uTluNsYPLduntQmr6vYaSksUf768UbSoHpRu241TdU1mTU5DeSyIJ4sIUxtxjsBTKNjaQNqep3d20t/NteOZxlUPKngdD246VFvkneR4siEbQ+6PB59v80JdSzLI+2Lyi65ZH6N7Yx3rdrtid6KBBMBCecHcB1x9a0KNLQLG96PIkWWHKlQBgcFhXqDmlv4w1uEim2qP3u7nH0969S8WNZ//Z' }} />
-                <Paragraph style={{textAlign:'center'}}>Precio: $</Paragraph>
-                <Paragraph style={{textAlign:'center'}}>HealthScore: $</Paragraph>
-                <Paragraph style={{textAlign:'center'}}>Is vegan: $</Paragraph>
+                <Card.Cover source={{ uri: image }} />
+                <Paragraph style={{ textAlign: 'center' }}>Precio: ${informacion.pricePerServing}</Paragraph>
+                <Paragraph style={{ textAlign: 'center' }}>HealthScore: {informacion.healthScore}</Paragraph>
+                <Paragraph style={{ textAlign: 'center' }}>Is vegan: {informacion.vegan ? 'Si' : 'No'}</Paragraph>
+                <Button
+                    mode="outlined"
+                    onPress={(e) => agregarMenu(informacion.vegan, informacion.pricePerServing, informacion.healthScore)}>
+                    Add to the menu
+                </Button>
+                <Button
+                    mode="outlined"
+                    onPress={navigation.navigate('HomeScreen')}>
+                    Back
+                </Button>
             </Card>
         </View>
     )

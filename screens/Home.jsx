@@ -43,7 +43,8 @@ export default function HomeScreen({ navigation }) {
     const renderItem = ({ item }) => (
         <CardFlat 
         title={item.title}
-        image={item.image} />
+        image={item.image}
+        id={item.id} />
       );
 
     return (
@@ -59,7 +60,10 @@ export default function HomeScreen({ navigation }) {
             data={plato.arrayPLatos}
             renderItem={renderItem}
             keyExtractor={item => item.title}
+            
         />
+            
+       
         </View>
     )
 }

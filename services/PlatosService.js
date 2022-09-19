@@ -12,3 +12,22 @@ export const searchEntry = async (search) => {
       throw "error"
     });
 };
+
+
+export const getFoodInfo = async (id) => {
+  console.log(id)
+  return PlatosClient
+    .get(`recipes/${id}/information?apiKey=5fbfaca6af9949e48de98190593f70f9`, 
+      
+    )
+    .then(async(res) => {
+      
+      const info=res.data
+      console.log(info)
+      return info
+    })
+    .catch((e) => {
+      console.log(`register error`, e.response);
+      throw "error"
+    });
+};

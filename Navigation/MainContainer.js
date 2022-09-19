@@ -22,14 +22,17 @@ return(
             name='ProfileScreen'
             component={ ProfileScreen }
         />
-        <Stack.Screen
-            name='HomeScreen'
-            component={ HomeScreen }
-        />
-        <Stack.Screen
-            name='PlatoScreen'
-            component={ PlatoScreen }
-        />
+        <Stack.Screen 
+            name='HomeScreen'>
+                {(props) => <HomeScreen {...props}
+            />}
+            </Stack.Screen>
+
+         <Stack.Screen 
+            name='PlatoScreen'>
+                {(props) => <PlatoScreen {...props}
+            />}
+        </Stack.Screen>
         
          
     </Stack.Navigator>
