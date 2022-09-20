@@ -4,8 +4,14 @@ import { Searchbar } from 'react-native-paper';
 import { PlatosClient } from '../services/PlatosClient';
 import { searchEntry } from '../services/PlatosService';
 import CardFlat from '../components/CardFlat';
+import { Button } from 'react-native-paper';
+import { ActionTypes, useContextState } from '../contextState'
 
 export default function HomeScreen({ navigation }) {
+
+    const { contextState, setContextState } = useContextState()
+
+    console.log("array", contextState.menu.arrayPlatos)
 
     const [searchState, setSearchState] = useState({
         search: ''
@@ -55,12 +61,12 @@ export default function HomeScreen({ navigation }) {
                 onChangeText={text => onPressSearch(text)}
                 iconColor="red"
             />
+            <Button mode="outlined" style={{backgroundColor:'white', marginBottom:20}} onPress={()=>navigation.navigate("MenuScreen")}>Menu</Button>
 
         <FlatList
             data={plato.arrayPLatos}
             renderItem={renderItem}
             keyExtractor={item => item.title}
-            
         />
             
        

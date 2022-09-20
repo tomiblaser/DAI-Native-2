@@ -26,13 +26,13 @@ export default function CardFlat(props) {
     let platosNormales = 0;
     let platosVeganos = 0;
 
-    const newMenu = contextState.menu.listaPlatos.filter(word => word.id !== id)
-    const platoEliminado = contextState.menu.listaPlatos.filter(word => word.id === id)
+    const newMenu = contextState.menu.arrayPlatos.filter(word => word.id !== id)
+    const platoEliminado = contextState.menu.arrayPlatos.filter(word => word.id === id)
 
 
-    let HealthTotal = contextState.menu.healthScore - platoEliminado[0].healthScore
+    let HealthTotal = contextState.menu.healthScoreAcumulativo - platoEliminado[0].healthScore
 
-
+    
 
     switch (platoEliminado[0].vegan) {
       case true:
@@ -58,8 +58,8 @@ export default function CardFlat(props) {
       }
     })
 
+    navigation.navigate("HomeScreen")
 
-    navigation.navigate("Home")
   }
 
 

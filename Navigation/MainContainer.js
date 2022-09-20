@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import ProfileScreen from '../screens/ProfileScreen'
 import HomeScreen from '../screens/Home';
 import PlatoScreen from '../screens/PlatoScreen';
+import MenuScreen from '../screens/MenuScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -33,6 +34,9 @@ return(
                 {(props) => <PlatoScreen {...props}
             />}
         </Stack.Screen>
+        <Stack.Screen 
+            name='MenuScreen'
+            component={MenuScreen}/>
         
          
     </Stack.Navigator>

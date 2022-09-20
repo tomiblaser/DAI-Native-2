@@ -23,7 +23,7 @@ export default function PlatoScreen({ navigation, route }) {
 
         })
             .catch(() => {
-                console.log("noooo")
+                console.log("error")
 
                 Alert.alert("Datos incorrectos")
             });
@@ -32,8 +32,7 @@ export default function PlatoScreen({ navigation, route }) {
     const agregarMenu = (vegano, precioPlato, healthScorePlato) => {
         let platosNormales = 0;
         let platosVeganos = 0;
-        let HealthTotal = contextState.menu.healthScore + healthScorePlato
-        console.log("hola gagaga", vegano)
+        let HealthTotal = contextState.menu.healthScoreAcumulativo + healthScorePlato
 
         switch (vegano) {
             case true:
@@ -46,13 +45,12 @@ export default function PlatoScreen({ navigation, route }) {
 
 
         if (platosVeganos == 1 && contextState.menu.platoVeganos == 2) {
-            Alert.alert("Llegaste al maximo de platos veganos")
-            console.log("No se admiten mas platos veganos")
+            Alert.alert("No se pueden agregar mas platos veganos")
+            console.log("No se pueden agregar mas platos veganos")
         } else if (platosNormales == 1 && contextState.menu.platoNormales == 2) {
-            Alert.alert("Llegaste al maximo de platos NO veganos")
-            console.log("No se admiten mas platos no veganos")
+            Alert.alert("No se pueden agregar mas platos normales")
+            console.log("No se pueden agregar mas platos normales")
         } else {
-            console.log("entro al context")
             setContextState({
                 type: ActionTypes.setMenu,
                 value: {
@@ -60,12 +58,12 @@ export default function PlatoScreen({ navigation, route }) {
                     platoVeganos: (contextState.menu.platoVeganos + platosVeganos),
                     precioMenu: (contextState.menu.precioMenu + precioPlato),
 
-                    healthScore: (contextState.menu.healthScore + healthScorePlato),
+                    healthScoreAcumulativo: (contextState.menu.healthScoreAcumulativo + healthScorePlato),
                     promedioHealthScore: (HealthTotal / (contextState.menu.cantidadPlatos + 1)),
 
                     cantidadPlatos: (contextState.menu.cantidadPlatos + 1),
 
-                    listaPlatos: [...contextState.menu.listaPlatos, informacion]
+                    arrayPlatos: [...contextState.menu.arrayPlatos, informacion]
                 }
             })
 
@@ -95,11 +93,7 @@ export default function PlatoScreen({ navigation, route }) {
                     onPress={(e) => agregarMenu(informacion.vegan, informacion.pricePerServing, informacion.healthScore)}>
                     Add to the menu
                 </Button>
-                <Button
-                    mode="outlined"
-                    onPress={navigation.navigate('HomeScreen')}>
-                    Back
-                </Button>
+                
             </Card>
         </View>
     )
