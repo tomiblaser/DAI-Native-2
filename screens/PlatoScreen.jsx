@@ -54,9 +54,9 @@ export default function PlatoScreen({ navigation, route }) {
             setContextState({
                 type: ActionTypes.setMenu,
                 value: {
-                    platoNoVeganos: (contextState.menu.platoNormales + platosNormales),
+                    platoNormales: (contextState.menu.platoNormales + platosNormales),
                     platoVeganos: (contextState.menu.platoVeganos + platosVeganos),
-                    precioMenu: (contextState.menu.precioMenu + precioPlato),
+                    precioTotal: (contextState.menu.precioTotal + precioPlato),
 
                     healthScoreAcumulativo: (contextState.menu.healthScoreAcumulativo + healthScorePlato),
                     promedioHealthScore: (HealthTotal / (contextState.menu.cantidadPlatos + 1)),
@@ -80,6 +80,7 @@ export default function PlatoScreen({ navigation, route }) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465', justifyContent: 'center' }}>
+            <Button mode="outlined" style={{ backgroundColor: 'white', marginTop: 20, marginBottom: 20 }} onPress={() => navigation.navigate("HomeScreen")}>Back</Button>
             <Card mode='contained' style={{ width: 550, height: 350, marginBottom: 20 }}>
                 <Card.Content>
                     <Title style={{ textAlign: 'center' }}>{title}</Title>
@@ -87,7 +88,7 @@ export default function PlatoScreen({ navigation, route }) {
                 <Card.Cover source={{ uri: image }} />
                 <Paragraph style={{ textAlign: 'center' }}>Precio: ${informacion.pricePerServing}</Paragraph>
                 <Paragraph style={{ textAlign: 'center' }}>HealthScore: {informacion.healthScore}</Paragraph>
-                <Paragraph style={{ textAlign: 'center' }}>Is vegan: {informacion.vegan ? 'Si' : 'No'}</Paragraph>
+                <Paragraph style={{ textAlign: 'center' }}>Is vegan: {informacion.vegan ? 'Yes' : 'No'}</Paragraph>
                 <Button
                     mode="outlined"
                     onPress={(e) => agregarMenu(informacion.vegan, informacion.pricePerServing, informacion.healthScore)}>
