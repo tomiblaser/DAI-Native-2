@@ -1,12 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
-import ProfileScreen from '../screens/ProfileScreen'
 import HomeScreen from '../screens/Home';
-import PlatoScreen from '../screens/PlatoScreen';
-import MenuScreen from '../screens/MenuScreen';
+import ContactosScreen from '../screens/ContactosScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -20,24 +17,13 @@ return(
     }
     }>
         <Stack.Screen
-            name='ProfileScreen'
-            component={ ProfileScreen }
+            name='HomeScreen'
+            component={ HomeScreen }
         />
-        <Stack.Screen 
-            name='HomeScreen'>
-                {(props) => <HomeScreen {...props}
-            />}
-            </Stack.Screen>
-
-         <Stack.Screen 
-            name='PlatoScreen'>
-                {(props) => <PlatoScreen {...props}
-            />}
-        </Stack.Screen>
-        <Stack.Screen 
-            name='MenuScreen'
-            component={MenuScreen}/>
-        
+        <Stack.Screen
+            name='ContactosScreen'
+            component={ ContactosScreen }
+        />
          
     </Stack.Navigator>
 </NavigationContainer>

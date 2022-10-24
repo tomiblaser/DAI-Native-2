@@ -1,75 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Alert, FlatList } from "react-native"
-import { Searchbar } from 'react-native-paper';
-import { PlatosClient } from '../services/PlatosClient';
-import { searchEntry } from '../services/PlatosService';
-import CardFlat from '../components/CardFlat';
+import React from 'react';
+import { View } from "react-native";
 import { Button } from 'react-native-paper';
-import { ActionTypes, useContextState } from '../contextState'
 
 export default function HomeScreen({ navigation }) {
 
-    const { contextState, setContextState } = useContextState()
-
-    console.log("array", contextState.menu.arrayPlatos)
-
-    const [searchState, setSearchState] = useState({
-        search: ''
-    });
-
-    const [plato, setPlato] = useState({
-        arrayPLatos:[]
-        });
-
-    const onPressSearch = async (text) => {
-
-        let largo = text.length
-
-        if (!text) {
-
-            console.log("Ingrese algo para continuar con la busqueda")
-            Alert.alert("Ingrese algo para continuar con la busqueda")
-
-        } else if (largo < 3) {
-            console.log("Ingrese al menos 3 letras en la barra de búsqueda para buscar platos.")
-            Alert.alert("Ingrese al menos 3 letras en la barra de búsqueda para buscar platos.")
-        } else {
-
-            await searchEntry(text).then((response) => {
-                console.log(response)
-                setPlato({arrayPLatos: response})
-            })
-                .catch(() => {
-                    console.log("No se han encontrado coincidencias con su busqueda")
-                    Alert.alert("No se han encontrado coincidencias con su busqueda")
-                });
-        }
-    }
-
-    const renderItem = ({ item }) => (
-        <CardFlat 
-        title={item.title}
-        image={item.image}
-        id={item.id} />
-      );
-
     return (
-        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#e66465' }}>
-            <Searchbar
-                style={{ marginTop: 10, marginBottom:20 }}
-                placeholder="Search"
-                onChangeText={text => onPressSearch(text)}
-                iconColor="red"
-            />
-            <Button mode="outlined" style={{backgroundColor:'white', marginBottom:20}} onPress={()=>navigation.navigate("MenuScreen")}>Menu</Button>
-
-        <FlatList
-            data={plato.arrayPLatos}
-            renderItem={renderItem}
-            keyExtractor={item => item.title}
-        />
-            
-       
+        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#3052a1', justifyContent: 'center' }}>
+            <Button mode="outlined" onPress={()=>{navigation.navigate("ContactosScreen")}} style={{backgroundColor:'#807d3c', marginBottom:20}}>Ver contactos</Button>
+            <Button mode="outlined" style={{backgroundColor:'#807d3c', marginBottom:20}}>Menu</Button>
+            <Button mode="outlined" style={{backgroundColor:'#807d3c', marginBottom:20}}>Menu</Button>
+            <Button mode="outlined" style={{backgroundColor:'#807d3c', marginBottom:20}}>Menu</Button>
+            <Button mode="outlined" style={{backgroundColor:'#807d3c', marginBottom:20}}>Menu</Button>
         </View>
     )
 }
