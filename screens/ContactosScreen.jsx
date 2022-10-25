@@ -3,10 +3,11 @@ import * as Contacts from 'expo-contacts';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import FlatListCard from '../components/FlatListCard';
+import { Vibrar } from '../components/Vibrar';
 
 export default function ContactosScreen({navigation}) {
   
-    const [contactos, setContactos] = useState()
+    const [contactos, setContactos] = useState([])
 
     useEffect(()=>{
         (async ()=>{
@@ -15,30 +16,35 @@ export default function ContactosScreen({navigation}) {
                 const {data} = await Contacts.getContactsAsync({
                     fields: [Contacts.Fields.Name, Contacts.Fields.LastName, Contacts.Fields.PhoneNumbers],
                 });
+                console.log(data.length)
                 setContactos(data)
                 if(data.length > 0) {
                     const contact = data[0]
                 }
             }
             else{
+                Vibrar()
                 Alert.alert("Por favor, dar acceso a los contactos")
                 navigation.navigate("HomeScreen")
             }    
     })();
 },[]);
 
-  const renderItem = ({ contactos }) => (
+  const renderItem = ({ item }) => (
     <FlatListCard
-    nombre={contactos.firstName}
-    apellido={contactos.lastName}
-    numero={contactos.phoneNumbers} />
+        nombre={item.firstName}
+        apellido={item.lastName}
+        numero={item.phoneNumbers} 
+    />
   );
 
-  return (
-    <FlatList
+  return ( 
+    <View style={{justifyContent:'center', alignItems:'center'}}>
+        <FlatList
             data={contactos}
-            renderItem={}
+            renderItem={renderItem}
             keyExtractor={item => item.id}
         />
+    </View>
   );
 }
