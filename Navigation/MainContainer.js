@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../screens/Home';
 import ContactosScreen from '../screens/ContactosScreen';
 import TelefonoScreen from '../screens/TelefonoScreen';
+import QRScanner from '../screens/QRScanner';
 
 const Stack = createNativeStackNavigator()
 
@@ -28,6 +29,10 @@ return(
         <Stack.Screen
             name='TelefonoScreen'
             component={ TelefonoScreen }
+        />
+        <Stack.Screen
+            name='QRScanner'
+            component={ QRScanner }
         />
          
     </Stack.Navigator>
