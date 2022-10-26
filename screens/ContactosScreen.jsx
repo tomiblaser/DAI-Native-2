@@ -15,7 +15,7 @@ export default function ContactosScreen({navigation}) {
                 const {data} = await Contacts.getContactsAsync({
                     fields: [Contacts.Fields.Name, Contacts.Fields.LastName, Contacts.Fields.PhoneNumbers],
                 });
-                console.log(data.length)
+                console.log(Contacts.Fields.PhoneNumbers)
                 setContactos(data)
                 if(data.length > 0) {
                     const contact = data[0]
@@ -33,7 +33,7 @@ export default function ContactosScreen({navigation}) {
     <FlatListCard
         nombre={item.firstName}
         apellido={item.lastName}
-        numero={item.phoneNumbers} 
+         
     />
   );
 
