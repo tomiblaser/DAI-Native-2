@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import HomeScreen from '../screens/Home';
 import ContactosScreen from '../screens/ContactosScreen';
+import TelefonoScreen from '../screens/TelefonoScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -23,6 +24,10 @@ return(
         <Stack.Screen
             name='ContactosScreen'
             component={ ContactosScreen }
+        />
+        <Stack.Screen
+            name='TelefonoScreen'
+            component={ TelefonoScreen }
         />
          
     </Stack.Navigator>
