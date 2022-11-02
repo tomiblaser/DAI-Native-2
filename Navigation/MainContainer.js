@@ -6,6 +6,7 @@ import HomeScreen from '../screens/Home';
 import ContactosScreen from '../screens/ContactosScreen';
 import TelefonoScreen from '../screens/TelefonoScreen';
 import QRScanner from '../screens/QRScanner';
+import HoraClima from '../screens/HoraClima';
 
 const Stack = createNativeStackNavigator()
 
@@ -29,6 +30,10 @@ return(
         <Stack.Screen
             name='TelefonoScreen'
             component={ TelefonoScreen }
+        />
+        <Stack.Screen
+            name='HoraClima'
+            component={ HoraClima }
         />
         <Stack.Screen
             name='QRScanner'

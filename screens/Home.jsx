@@ -11,7 +11,7 @@ export default function HomeScreen({ navigation }) {
             <Button mode="outlined" onPress={()=>{navigation.navigate("ContactosScreen")}} style={{backgroundColor:'yellow', marginBottom:20}}>Ver contactos</Button>
             <Button mode="outlined" onPress={()=>{Vibrar()}} style={{backgroundColor:'yellow', marginBottom:20}}>Vibrar</Button>
             <Button mode="outlined" onPress={()=>{navigation.navigate("TelefonoScreen")}} style={{backgroundColor:'yellow', marginBottom:20}}>Configurar telefono de emergencia</Button>
-            <Button mode="outlined" style={{backgroundColor:'yellow', marginBottom:20}}>Menu</Button>
+            <Button mode="outlined" onPress={()=>{navigation.navigate("HoraClima")}} style={{backgroundColor:'yellow', marginBottom:20}}>Hora y Temperatura</Button>
             <Button mode="outlined" onPress={()=>{navigation.navigate("QRScanner")}} style={{backgroundColor:'yellow', marginBottom:20}}>Escanear QR</Button>
         </View>
     )
