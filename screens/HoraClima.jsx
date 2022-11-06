@@ -25,27 +25,28 @@ export default function HoraClima({ navigation }) {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 setMensajeError('Por favor, otorgue el acceso a la ubicacion');
+                Vibrar()
+                Alert.alert(mensajeError)
                 return;
+            } else {
+                let coordenadas = await Location.getCurrentPositionAsync({});
+                setUbicacion(coordenadas);
+                WeatherEndPoint(coordenadas).then((data) => {
+                    setClima(data)
+                })
+                    .catch((err) => {
+                        Vibrar()
+                        Alert.alert('Error con la API')
+                        throw err
+                    });
             }
-            let coordenadas = await ubicacion.getCurrentPositionAsync({});
-            setUbicacion(coordenadas);
-        })();
+            }
+
+        )();
     }, []);
 
-    let posibleUbicacion = 'Aguarde por favor..';
-    if (mensajeError) {
-        Vibrar()
-        Alert.alert(mensajeError)
-    } else if (ubicacion) {
-        posibleUbicacion = JSON.stringify(ubicacion);
-    }
 
     const [Clima, setClima] = useState({})
-
-    useEffect(async () => {
-        const datos = await WeatherEndPoint(posibleUbicacion);
-        setClima(datos);
-    }, [])
 
     return (
 
@@ -53,7 +54,7 @@ export default function HoraClima({ navigation }) {
             <Text style={{ color: 'white' }}>
                 {hora}
             </Text>
-            <Text style={{ color: 'white' }}> Usted se encuentra en {Clima?.ubicacion?.name} y la temperatura es de {Clima?.hora?.temp_c}°</Text>
+            <Text style={{ color: 'white' }}> Usted se encuentra en {Clima?.location?.region} y la temperatura es de {Clima?.current?.temp_c}°</Text>
         </View>
     )
 }

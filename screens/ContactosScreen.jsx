@@ -43,6 +43,7 @@ export default function ContactosScreen({navigation}) {
             data={contactos}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            
         />
     </View>
   );
