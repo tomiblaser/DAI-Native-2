@@ -4,7 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Vibrar } from '../components/Vibrar';
 import { qrImage } from '../assets/QR.png'
 
-export default function App() {
+export default function QRScanner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
 
@@ -32,9 +32,11 @@ export default function App() {
 
     return (
         <View style={styles.container}>
+            
             <Image style={styles.imagen}
                 source={require('../assets/QR.png')}
             />
+            <Button onPress={()=>{navigation.navigate("HomeScreen")}} title={'Volver'}/>
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={styles.qrscanner}

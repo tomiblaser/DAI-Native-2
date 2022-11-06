@@ -2,21 +2,18 @@ import axios from 'axios';
 import { Vibrar } from '../components/Vibrar';
 import { Alert } from 'react-native';
 
-export async function  WeatherEndPoint(ubi) {
+export async function  WeatherEndPoint(coordenadas) {
     const baseUrl='http://api.weatherapi.com/v1';
     const ApiKey = "b8f50a0571674e8b99b181446220611";
-    let location = ubi;
-    console.log(location)
+    let location = coordenadas;
     
-    return axios.get(`http://api.weatherapi.com/v1/current.json?key=b8f50a0571674e8b99b181446220611&q=-34.6018807,-58.4356863`)
+    return axios.get(`${baseUrl}/current.json?key=${ApiKey}&q=${coordenadas.coords.latitude},${coordenadas.coords.longitude}`)
         .then((response) => {
-            console.log(response.data);
             return response.data;
-
+            
         })
         .catch((error) => {
             Vibrar()
             Alert.alert("Ha habido un error con la API del clima")
-            console.log(error);
         })
 }

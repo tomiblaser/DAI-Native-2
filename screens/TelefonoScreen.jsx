@@ -16,7 +16,6 @@ export default function TelefonoScreen({ navigation }) {
         else {
             await AsyncStorage.setItem('emergencyNumber', telefono)
             const prueba =  await AsyncStorage.getItem('emergencyNumber')
-            console.log(prueba)
             Alert.alert("Se guardo en el storage")
         }
     }
@@ -24,6 +23,7 @@ export default function TelefonoScreen({ navigation }) {
     return (
 
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#3052a1', justifyContent: 'center' }}>
+            <Button mode="outlined" onPress={()=>{navigation.navigate("HomeScreen")}} style={{backgroundColor:'yellow', marginTop:30}}>Volver</Button>
             <TextInput
                 style={{width:300}}
                 mode='outlined'

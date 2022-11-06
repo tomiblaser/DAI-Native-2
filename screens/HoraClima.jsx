@@ -4,6 +4,7 @@ import * as Location from 'expo-location'
 import { WeatherEndPoint } from '../axios/WeatherEndPoint';
 import { Alert } from 'react-native';
 import { Vibrar } from '../components/Vibrar';
+import { Button } from 'react-native-paper';
 
 export default function HoraClima({ navigation }) {
     const [hora, setHora] = useState('');
@@ -51,6 +52,7 @@ export default function HoraClima({ navigation }) {
     return (
 
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#3052a1', justifyContent: 'center' }}>
+            <Button mode="outlined" onPress={()=>{navigation.navigate("HomeScreen")}} style={{backgroundColor:'yellow', marginTop:30}}>Volver</Button>
             <Text style={{ color: 'white' }}>
                 {hora}
             </Text>

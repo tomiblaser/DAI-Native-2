@@ -3,6 +3,7 @@ import * as Contacts from 'expo-contacts';
 import { useEffect, useState } from 'react';
 import FlatListCard from '../components/FlatListCard';
 import { Vibrar } from '../components/Vibrar';
+import { Button } from 'react-native-paper';
 
 export default function ContactosScreen({navigation}) {
   
@@ -15,7 +16,6 @@ export default function ContactosScreen({navigation}) {
                 const {data} = await Contacts.getContactsAsync({
                     fields: [Contacts.Fields.Name, Contacts.Fields.LastName, Contacts.Fields.PhoneNumbers],
                 });
-                console.log(Contacts.Fields.PhoneNumbers)
                 setContactos(data)
                 if(data.length > 0) {
                     const contact = data[0]
@@ -29,21 +29,13 @@ export default function ContactosScreen({navigation}) {
     })();
 },[]);
 
-  const renderItem = ({ item }) => (
-    <FlatListCard
-        nombre={item.firstName}
-        apellido={item.lastName}
-         
-    />
-  );
-
   return ( 
     <View style={{justifyContent:'center', alignItems:'center'}}>
+        <Button mode="outlined" onPress={()=>{navigation.navigate("HomeScreen")}} style={{backgroundColor:'yellow', marginTop:30}}>Volver</Button>
         <FlatList
             data={contactos}
-            renderItem={renderItem}
+            renderItem={({ item }) => <FlatListCard key={item.id} contactos={item}/>}
             keyExtractor={item => item.id}
-            
         />
     </View>
   );
